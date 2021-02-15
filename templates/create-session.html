@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link href="/static/css/template.css" type="text/css" rel="stylesheet">
+
+    <title>Create Session</title>
+</head>
+<body style="background-color: #4595c7">
+
+
+
+    <div class="create-session">
+
+        <div class="create-header">
+            Create Chat<br>Session
+        </div>
+
+            <form id="create-form" name="message" class="create-input-holder" method="POST" action="{{ url_for("create_session") }}">
+
+                <label class="create-session-label" for="name">chat room name</label>
+                <input id="name" type="text" class="create-input" name="name" value="" maxlength="16">
+                <label class="create-session-label" for="amount">set user limit (2-20)</label>
+                <input id="amount" type="number" class="create-input" name="amount" value="2" min="2" max="20">
+                <input class="create-session-button" type="submit" value="Create Chat" onclick="submitForm()">
+
+            </form>
+
+        <h3>{{ error_message }}</h3>
+
+    </div>
+    `<script>
+
+        function submitForm() {
+            var frm = document.getElementsByName('create-form')[0];
+            frm.submit();
+            frm.reset();
+           return false;
+        }
+    </script>
+
+
+</body>
+</html>

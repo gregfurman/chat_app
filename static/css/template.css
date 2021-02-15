@@ -1,0 +1,750 @@
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    .wrapper{
+        width: 99%;
+        display: inline-flex;
+        min-height: 40px;
+        max-height: 110px;
+        border: solid #c3c3c3 2px;
+        border-radius: 15px;
+
+    }
+
+    .button-center{
+
+        width: 100px;
+        height: 100px;
+
+    }
+
+    .button-send {
+
+        /*background-color:#4595c7;*/
+        /*border-radius:15px;*/
+        /*border:1px solid white;*/
+        /*display: inline-block;*/
+        cursor:pointer;
+        /*color:#ffffff;*/
+        /*font-family: proxima-nova,sans-serif;*/
+        /*font-size:15px;*/
+        /*padding:16px 15px;*/
+        /*text-decoration:none;*/
+        border-radius: 16px;
+        background-color: transparent;
+        border-color: transparent;
+        width: 40px;
+        height: 40px;
+        float: right;
+
+
+    }
+
+
+
+    /*.button-send:hover {*/
+        /*background-color:white;*/
+        /*color: #4595c7;*/
+    /*}*/
+
+    .button-send:active {
+        position:relative;
+        top:1px;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+
+	#user-input.hover {
+		border: 10px dashed #ccc;
+        margin: 20px auto;
+        width: 400px;
+        height: 75px
+	}
+
+
+    .side-menu{
+        height: 100%;
+        width: 50px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #4595c7;
+        transition: width 500ms;
+    }
+
+
+    .side-menu:hover{
+        width: 166px;
+        transition: width 500ms;
+    }
+
+
+    .side-menu-item{
+        height: 50px;
+        width: 50px;
+        opacity: 0;
+        transition: width 500ms, opacity 300ms, background-color 100ms, color 100ms;
+        background-color: transparent;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .side-menu-item:hover{
+        background-color: white;
+        color: #4595c7;
+        flex: 0 0 120px;
+        cursor: pointer;
+    }
+
+    .side-menu:hover > .side-menu-item{
+        width: 166px;
+        opacity: 1;
+    }
+
+
+    .main{
+
+        border: 2px solid #4595c7;
+        padding: 10px 10px 10px 10px;
+        position: absolute;
+        font-family: proxima-nova,sans-serif;
+        background-color: #ffffff;
+        width: 80%;
+        height: 90%;
+        left:0; right:0;
+        top:0; bottom:0;
+        margin:auto;
+
+        /*this to solve "the content will not be cut when the window is smaller than the content": */
+        max-width:100%;
+        max-height:100%;
+        overflow:auto;
+
+
+
+    }
+
+
+    .icon{
+        width: 30px;
+        height: 30px;
+        margin-left: 10px;
+        margin-top: 10px;
+        transition: margin-left 500ms;
+    }
+
+    .side-menu:hover > .icon{
+
+        margin-left: 70px;
+    }
+
+    .message-input{
+
+        display: block;
+        position: relative;
+        overflow-y: auto;
+
+        word-wrap: break-word;
+        margin: 2px 1px 2px 10px;
+        width: 98%;
+
+        border-radius: 15px;
+        padding: 10px 10px 10px 10px;
+        line-height: 20px;
+        vertical-align: center;
+        outline: solid white;
+
+
+    }
+
+    [contentEditable=true]:empty:not(:focus):before{
+        content:attr(data-text);
+        color: grey;
+    }
+
+
+    .message-holder{
+        color: #ccc;
+        font-size: 20px;
+        overflow-y: auto;
+        max-width: 96%;
+        height: 50%;
+        width: 96%;
+        resize: none;
+        padding: 10px 10px 10px 10px;
+        /*border: 2px solid #4595c7;*/
+        background-color: white;
+
+    }
+
+    .message-holder-drag {
+        color: white;
+        font-size: 20px;
+        overflow-y: auto;
+        max-width: 96%;
+        height: 50%;
+        width: 96%;
+        resize: none;
+        padding: 5px 5px 5px 5px;
+        background-color: white;
+        border: 5px grey dashed;
+
+    }
+
+    .message-holder-drag div{
+        color: white;
+        background-color: white;
+        border: solid white;
+
+    }
+
+
+    .current-users{
+
+        background-color: transparent;
+        color: white;
+        float: right;
+        text-align: center;
+        margin-top: 15px;
+        transition: margin-right 500ms;
+    }
+
+     .side-menu:hover > .current-users{
+        margin-left: 60px;
+    }
+
+    .users-icon{
+        width: 45px;
+        height: 45px;
+        float: right;
+        position: absolute;
+        right: 0;
+        top: 15px;
+        margin-right: 10px;
+        transition: margin-right 500ms;
+        border-radius: 16px;
+
+    }
+
+
+    .top-bar{
+        width: 100%;
+    }
+
+    .chatroom-header{
+
+        position: relative;
+        /*background-color: #4595c7;*/
+        border-radius: 15px;
+        width: 50%;
+        float: left;
+        color: #36454f;
+        margin-bottom: 10px;
+        display: inline-block;
+        border: 2px solid white;
+
+    }
+
+    .chatroom-header:hover > .users-icon, .chatroom-header.hover > .users-icon{
+        margin-right: 50px;
+    }
+
+    .cancel-icon{
+        background-color: #4595c7;
+        border-radius: 15px;
+        border: 2px solid white;
+        width: 80px;
+        height: 20px;
+        float: left;
+        color: white;
+        margin-left: 15px;
+        vertical-align: middle;
+        line-height: 20px;
+        margin-top: 5px;
+        text-align: center;
+
+
+    }
+
+    .cancel-icon:hover{
+        background-color: white;
+        color: #4595c7;
+        cursor: pointer;
+
+    }
+
+
+    .chatroom-heading{
+        float: left;
+        margin-left: 10px;
+    }
+
+
+    #progress{
+
+        width: 400px;
+        background-color: transparent;
+        border: 2px solid #4595c7;
+        /*float: left;*/
+        display: block;
+        position: absolute;
+        z-index: 0;
+        text-align: center;
+        line-height: 17px;
+        vertical-align: middle;
+        overflow: hidden;
+        color: white;
+        letter-spacing: 1px;
+    }
+
+
+
+    #bar{
+        width: 0;
+        height: 18px;
+        background-color: #4595c7;
+        /*float: left;*/
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        max-width: inherit;
+        text-align: center;
+
+    }
+
+
+
+    #joined_users{
+        overflow: hidden;
+        float: right;
+        position: absolute;
+        right: 0;
+        top: 25px;
+        margin-right: 20px;
+    }
+
+    #joined_users:hover{
+        cursor: default;
+    }
+
+    .create-session-holder{
+
+        float: left;
+        position: relative;
+        border-radius: 15px;
+        border: 2px solid #4595c7;
+        display: inline-block;
+        padding: 10px 10px 10px 10px;
+        width: 300px;
+        margin-bottom: 10px;
+
+
+    }
+
+    .create-session-header{
+
+        position: relative;
+        background-color: #4595c7;
+        border-radius: 15px;
+        float: left;
+        color: white;
+        margin-bottom: 30px;
+        margin-right: 50px;
+        padding-left: 10px;
+        width: 400px;
+
+    }
+
+    .create-session-label{
+
+        display: block;
+        width: 100%;
+        height: 50px;
+        font-size: 22px;
+
+    }
+
+
+    .user-message{
+        position: relative;
+        display: inline-block;
+        background-color: #4595c7;
+        border-radius: 15px;
+        overflow-wrap: break-word;
+        max-width:500px;
+        color: white;
+        padding: 10px 10px 10px 10px;
+        font-size:15px;
+    }
+
+    .user-message a{
+        color: white;
+    }
+
+    .user-message-other{
+        position: relative;
+        display: inline;
+        background-color: #c9e0ea;
+        border-radius: 15px;
+        overflow-wrap: break-word;
+        max-width: 500px;
+        color: black;
+        margin-bottom: 5px;
+        float: right;
+        clear: both;
+        margin-right: 10px;
+        padding: 10px 10px 10px 10px;
+        font-size:15px;
+    }
+
+    .user-message-other a{
+        color: black;
+    }
+
+    .homepage{
+
+        margin: 0 auto;
+        background-color: #4595c7;
+        height: 100%;
+        width: 100%;
+        font-family: proxima-nova,sans-serif;
+    }
+
+    .homepage-header{
+        background-color: #4595c7;
+        overflow-wrap: break-word;
+        font-family: proxima-nova,sans-serif;
+        color: white;
+        font-size: 150px;
+        font-weight: 700;
+        line-height: 140px;
+        text-align: center;
+        vertical-align: middle;
+        margin-bottom: 50px;
+        margin-top: 100px;
+    }
+
+    .homepage-button{
+        transition: background-color 300ms, color 300ms;
+        margin: 0 auto;
+        line-height: 80px;
+        text-align: center;
+        vertical-align: middle;
+        border: solid white;
+        border-radius: 15px;
+        height: 80px;
+        width: 400px;
+        font-size: 26px;
+        color: white;
+        letter-spacing: 1px;
+        /*position:absolute;*/
+    }
+
+    .homepage-button:hover{
+        background-color: white;
+        color: #4595c7;
+        font-weight: lighter;
+        cursor: pointer;
+
+    }
+
+
+    .create-session{
+        margin: 0 auto;
+        background-color: #4595c7;
+        height: 100%;
+        width: 100%;
+        font-family: proxima-nova,sans-serif;
+    }
+
+    .create-header{
+
+        background-color: #4595c7;
+        overflow-wrap: break-word;
+        font-family: proxima-nova,sans-serif;
+        color: white;
+        font-size: 80px;
+        font-weight: 700;
+        line-height: 90px;
+        text-align: center;
+        vertical-align: middle;
+        /*margin-bottom: 50px;*/
+        /*margin-top: 100px;*/
+
+
+    }
+
+    .create-input-holder{
+
+        margin: 0 auto;
+        line-height: 80px;
+        text-align: center;
+        vertical-align: middle;
+        height: 200px;
+        width: 400px;
+        font-size: 26px;
+        color: white;
+        letter-spacing: 1px;
+        background-color: #4595c7;
+    }
+
+    .create-input{
+        /*outline: 0;*/
+        /*border-width: 0 0 2px;*/
+        border: solid white 2px;
+        /*border-color: white;*/
+        border-radius: 15px;
+        background-color: transparent;
+        color: white;
+        font-size: 25px;
+        width: 100%;
+        height: 40px;
+        text-align: center;
+
+
+
+    }
+
+    .create-label{
+
+
+    }
+
+    .create-session-button{
+        transition: background-color 300ms, color 300ms;
+        margin: 0 auto;
+        line-height: 50px;
+        text-align: center;
+        vertical-align: middle;
+        border: solid white;
+        border-radius: 15px;
+        height: 50px;
+        width: 60%;
+        font-size: 20px;
+        color: white;
+        letter-spacing: 1px;
+        background-color: #4595c7;
+        margin-top: 30px;
+    }
+
+    .create-session-button:hover{
+        background-color: white;
+        color: #4595c7;
+        cursor: pointer;
+
+
+    }
+
+    .browse{
+        opacity: 0.0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 0;
+        height:0;
+
+    }
+
+
+    .browse-wrapper{
+        width: 404px;
+        height: 18px;
+        overflow: hidden;
+
+
+    }
+    .browse-wrapper:hover{
+        cursor: pointer;
+    }
+
+    /*.browse-wrapper:hover > #progress{*/
+        /*background-color: white;*/
+        /*color: #4595c7;*/
+    /*}*/
+
+    .browse-text{
+        background-color: transparent;
+        vertical-align: middle;
+        text-align: center;
+        white-space: nowrap;
+        display: inline-block;
+
+    }
+
+    .modal-header-text{
+        font-size: 25px;
+        margin-bottom: 30px;
+    }
+
+    span{
+        position: relative;
+        display: block;
+        text-align: center;
+        /*margin-bottom: 30px;*/
+
+    }
+
+    .modal {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(1.1);
+        transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+        z-index: 10;
+    }
+
+
+    .modal-username {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(1.1);
+        transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+        z-index: 10;
+    }
+
+
+
+    .modal-content {
+        font-family: proxima-nova,sans-serif;
+        font-size: 20px;
+        height: 140px;
+        width: 300px;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 1rem 1.5rem;
+    }
+
+      .modal-content input{
+        font-size: 20px;
+    }
+
+     .modal-file-content {
+        font-family: proxima-nova,sans-serif;
+        font-size: 20px;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 1rem 1.5rem;
+         border: 10px dashed #ccc;
+    }
+
+    .modal-button-wrapper{
+        /*font-size: 15px;*/
+        position: absolute;
+        bottom: 0;
+        width: 80%;
+        height: 30px;
+        vertical-align: middle;
+        margin-bottom: 20px;
+
+    }
+
+    .modal-button-wrapper #proceed{
+
+        text-align: center;
+        vertical-align: 20px;
+        width: 100%;
+        display: inline-block;
+        margin: 0 auto;
+    }
+
+    .modal-button-wrapper #proceed:hover{
+        color: #4595c7;
+        cursor: pointer;
+    }
+
+    .close-button {
+        width: 50px;
+        float: right;
+        line-height: 50px;
+        text-align: center;
+        cursor: pointer;
+        background-color: transparent;
+        color: black;
+    }
+
+    .cancel-button {
+        float: left;
+        width: 50px;
+        line-height: 50px;
+        text-align: center;
+        cursor: pointer;
+        background-color: transparent;
+        color: black;
+    }
+
+
+    .close-button:hover {
+        color: #4595c7;
+    }
+
+    .cancel-button:hover {
+        color: #4595c7;
+    }
+    .show-modal {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1.0);
+        transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+    }
+
+    .trigger-exit-chat{
+        width: 30px;
+        height: 30px;
+        vertical-align: center;
+        float: right;
+    }
+
+
+    .trigger-exit-chat:hover{
+        cursor: pointer;
+    }
+
+
+    .file-upload{
+
+        position: relative;
+        display: block;
+
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        border-radius: 15px;
+        border: grey dashed 5px;
+        background-color: white;
+
+    }

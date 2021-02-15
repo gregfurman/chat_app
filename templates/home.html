@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link href="/static/css/template.css" type="text/css" rel="stylesheet">
+
+    <title>Home Test</title>
+</head>
+<body style="background-color: #4595c7">
+
+{#   <div class="side-menu" id="menu">#}
+{#        <img class="icon" src="/static/images/hamburger-menu.png"><br><br>#}
+{#        <div class="side-menu-item">Home</div>#}
+{#        <div class="side-menu-item" onclick="location.href= '{{ url_for('chat') }}'">Create</div>#}
+{#        <div class="side-menu-item">About</div>#}
+{##}
+{#    </div>#}
+
+    <div class="homepage">
+        <div class="homepage-header">
+        Let's Get<br>Chatting
+        </div>
+        <div class="homepage-button" onclick="location.href= '{{ url_for('chat') }}'">
+            create chat session
+        </div>
+    </div>
+
+
+</body>
+</html>

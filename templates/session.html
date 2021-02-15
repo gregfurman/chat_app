@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link href="/static/css/template.css" type="text/css" rel="stylesheet">
+
+    <title>Session</title>
+</head>
+<body style="background-color: #4595c7">
+
+    <div id="exit-chat" class="modal" onkeydown="closeModalKeyboard(this,event)">
+        <div class="modal-content">
+            <span class="modal-header-text">Exit Chat</span>
+            <span>Your conversation will be deleted</span>
+            <div class="modal-button-wrapper">
+                <div class="cancel-button" onclick="exit_chat()">Yes</div>
+                <div id="close" class="close-button" onclick="toggleModal(document.getElementById('exit-chat'))">Cancel</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="username-select" class="modal" onkeydown="closeModalKeyboard(this,event)">
+        <div class="modal-content">
+            <span class="modal-header-text">Select a display name</span>
+            <input style="margin: auto; display: block" type="text" id="username" onkeydown=" return alphaOnly(event)" />
+            <div class="modal-button-wrapper">
+                <div id="proceed" onclick="setUsername()">Proceed</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="main" id="main">
+
+        <div class="top-bar">
+
+            <img class="trigger-exit-chat" src="https://img.icons8.com/ios/50/000000/close-window.png" onclick="toggleModal(document.getElementById('exit-chat'))"/>
+
+            <div id="chatroom-header" class="chatroom-header">
+
+                <h1 class="chatroom-heading">{{ chatroom_name }}</h1>
+{#                <div id="joined_users">1/{{ chatroom_amount }}</div>#}
+{#                <img class="users-icon" src="/static/images/users-icon.png">#}
+
+            </div>
+
+        </div>
+
+        <div id="message-holder" class="message-holder"  contenteditable="false"></div>
+
+        <br>
+        <form class="send" action="" method="POST">
+
+            <div class="wrapper">
+
+                <div id="user-input" class="message-input" contenteditable="true" data-text="Type a message..."></div>
+
+
+                <img src="https://img.icons8.com/ios/50/000000/attach.png" class="button-send" onclick="document.getElementById('browse').click()">
+                 <input id="browse" type="file" class="browse" style="width: 0;height: 0;top:0;left:0"/>
+
+                <img src="/static/images/send.png" class="button-send" onclick="send_msg()">
+
+            </div>
+
+            <div style="width: 90px">
+
+            </div>
+        </form>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+        <script type="text/javascript">
+
+
+            var chatroom_id = {{ chatroom_id|tojson }};
+            var chatroom_name = {{ chatroom_name|tojson }};
+            var idVar;
+            var user_upload_message;
+
+            var upload_files;
+
+            var socket = io.connect("http://127.0.0.1:5000" ,{'sync disconnect on unload': true });
+
+            var holder = document.getElementById('message-holder');
+
+            var file_input = document.getElementById("browse");
+
+            var input = document.getElementById("user-input");
+
+            var modal_chat = document.getElementById("exit-chat");
+            var modal_username = document.getElementById("username-select");
+            var trigger = document.querySelector(".trigger-exit-chat");
+            var closeButton = document.querySelector(".close-button");
+
+
+            function exit_chat() {
+
+                socket.disconnect();
+                $("#main").remove();
+                toggleModal(modal_chat)
+                window.location.replace('/chat');
+
+            }
+
+           function alphaOnly(event) {
+              var key = event.keyCode;
+              return ((key >= 65 && key <= 90) || key == 8);
+        };
+
+
+            function closeModalKeyboard(ele,event) {
+
+                var key = event.keyCode;
+
+                if (key == 27 || key ==9){
+                    toggleModal(ele)
+                }
+
+            }
+
+            function setUsername() {
+                toggleModal(modal_username);
+
+                let username = document.getElementById("username");
+
+                if (username.value == "")
+                    username.value =  username.placeholder;
+
+            }
+
+
+            function toggleModal(modal) {
+
+                modal.classList.toggle("show-modal");
+            }
+
+
+            function windowOnClick(event) {
+                if (event.target === modal_chat) {
+                    toggleModal(event.target);
+
+                } else if(event.target === modal_username){
+                    setUsername()
+                }
+            }
+
+            trigger.addEventListener("click", toggleModal);
+            closeButton.addEventListener("click", toggleModal);
+            window.addEventListener("click", windowOnClick);
+
+            {#if (typeof window.FileReader === 'undefined') {#}
+            {#    state.style.display = 'block';#}
+
+
+            input.addEventListener("keyup", function(event) {
+
+              if (event.keyCode === 13 && !event.shiftKey) {
+                event.preventDefault();
+                send_msg()
+              }
+            });
+
+            holder.ondragover = function() {
+
+                this.className = 'message-holder-drag';
+
+                return false;
+            };
+
+           holder.ondrop = function(e) {
+
+                e.preventDefault();
+
+                this.className = 'message-holder';
+
+
+               upload_files = e.dataTransfer.files,
+                    reader = new FileReader();
+                reader.onload = function(event) {
+                    holder.innerText = event.target.result;
+                };
+
+
+                request_upload(upload_files);
+
+                return false;
+            };
+
+            holder.ondragend = function() {
+
+                this.className = 'message-holder';
+                return false;
+            };
+
+
+            holder.ondragleave = function () {
+
+                this.className = 'message-holder';
+                return false;
+            };
+
+
+            socket.on("user_connected", function(msg) {
+                socket.emit("join", {id: chatroom_id, name: chatroom_name})
+            });
+
+
+            socket.on("join",function (msg) {
+
+                toggleModal(modal_username);
+                let user_field = document.getElementById("username");
+                modal_username.focus();
+                user_field.placeholder = msg.username;
+
+
+            });
+
+            socket.on("room_status",function (msg) {
+                add_message('{{ chatroom_name }}',"New user joined!","")
+                {#document.getElementById("joined_users").textContent = msg.room_status + "/" + {{ chatroom_amount }};#}
+            });
+
+
+
+             window.addEventListener('beforeunload', function () {
+
+                 clearInterval(idVar);
+                 socket.disconnect();
+
+             });
+
+             window.addEventListener('unload', function () {
+
+                 clearInterval(idVar);
+                 socket.disconnect();
+             });
+
+
+             function send_msg(){
+
+                let user_name = document.getElementById("username").value;
+                let user_input = document.getElementById("user-input");
+                user_input.focus();
+
+
+
+                socket.emit("user_send_message",
+                        {
+                            user_name: user_name,
+                            message: user_input.textContent,
+                            room_name: chatroom_name + "-"+ chatroom_id
+                        });
+
+
+                  document.getElementById("user-input").textContent = "";
+
+
+
+             }
+
+             socket.on("finished_upload", function (msg) {
+                 clearInterval(idVar);
+
+                 let file_msg = msg.message;
+
+                 if (file_msg == "")
+                     file_msg = "Download file here"
+
+                 $("#upload-bar").remove();
+                 let download_link = '<a href="/download/'+msg.url+'" download="file">'+ file_msg +'</a>';
+
+                 add_message(msg.user,download_link,msg.sessionId);
+                 document.getElementById("browse").value = "";
+
+                 move(0,0);
+
+
+             });
+
+
+            function request_upload(userFiles) {
+
+                 if (userFiles.length > 0){
+                     let userFile = userFiles[0];
+                     socket.emit("request_upload",{name: userFile.name,
+                                    type: userFile.type,
+                                    size: userFile.size,message: document.getElementById("user-input").textContent});
+                     input.textContent = "";
+
+                     $("#message-holder").append(" <div id=\"upload-bar\"  class=\"browse-wrapper\" onclick=\"document.getElementById('browse').click()\">\n" +
+                    "            <div id=\"progress\">\n" +
+                    "                <span id=\"bar-text\" class=\"browse-text\">upload</span>\n" +
+                    "                <input id=\"browse\" type=\"file\" class=\"browse\" />\n" +
+                    "                <div id=\"bar\"></div>\n" +
+                    "            </div>\n" +
+                    "        <br></div>")
+                 }
+
+            }
+
+            file_input.onchange = function(e) {
+
+                e.preventDefault();
+
+               upload_files = this.files,
+                    reader = new FileReader();
+                reader.onload = function(event) {
+                    holder.innerText = event.target.result;
+                };
+
+                request_upload(upload_files);
+
+
+            };
+
+            function cancel_upload() {
+
+                clearInterval(idVar);
+                move(0,0);
+                document.getElementById("browse").value = ""
+                $("#upload-bar").remove();
+
+                socket.emit("cancel_upload");
+
+            }
+
+            socket.on("approve_upload",function send_file(msg) {
+
+                let user_name = document.getElementById("username").value;
+
+                if (upload_files.length > 0) {
+
+                    let userFile =upload_files[0];
+                    var count = 0;
+                    var window = 0;
+
+                    let fileReader = new FileReader();
+                    document.getElementById("bar-text").style.color = "black";
+
+                    idVar = setInterval(() => {
+
+                        slice = userFile.slice(window, window + 8192);
+                        window += 8192;
+                        fileReader.readAsArrayBuffer(slice);
+                        fileReader.onload = (evt) => {
+
+                            if (count < userFile.size) {
+
+                                let arrayBuffer = fileReader.result;
+                                socket.emit("slice_upload", {
+                                    user: user_name,
+                                    name: userFile.name,
+                                    message:msg.message,
+                                    type: userFile.type,
+                                    size: userFile.size,
+                                    data: arrayBuffer
+                                });
+
+
+                            } else {
+
+                                clearInterval(idVar)
+                            }
+
+                            count += slice.size;
+                            move(count, userFile.size)
+                        }
+                    }, 100);
+                }
+            });
+
+            function move(uploaded,total_size) {
+
+                let elem = document.getElementById("bar");
+                let text = document.getElementById("bar-text");
+                var width;
+
+                if (total_size > 0){
+                    width = Math.ceil(uploaded / total_size * 100);
+                    elem.style.width = width + "%"
+                    text.textContent = width + "%"
+                }
+
+
+               ;
+            }
+
+
+            function add_message(user_name,message,sessionId) {
+
+               if (typeof user_name !== 'undefined') {
+
+                   if (socket.id == sessionId) {
+
+                       $("#message-holder").append($('<div class="user-message"><b>' + user_name + '</b> ' + message + '</div><br><br>'));
+                   } else {
+                   $("#message-holder").append($('<div class="user-message-other"><b>' + user_name + '</b> ' + message + '</div><br><br>'));
+                }
+
+               }
+
+            }
+
+            socket.on("approve_message", function(msg){
+
+               add_message(msg.user_name,msg.message,msg.sessionId);
+
+
+           });
+
+
+        </script>
+
+    </div>
+
+</body>
+</html>
